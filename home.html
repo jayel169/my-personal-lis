@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Receptionist Dashboard</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div>
+            <div style="padding: 15px; border-bottom: 1px solid #3b82f6; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center;">
+                    <span style="font-size: 24px; margin-right: 10px;">🏥</span>
+                    <span class="sidebar-text" style="font-weight: bold; font-size: 20px;">MediCare</span>
+                </div>
+                <button class="toggle-btn" id="toggleSidebar" aria-label="Toggle sidebar menu">☰</button>
+            </div>
+            <nav>
+                <ul style="padding: 20px 0; list-style: none; margin: 0;">
+                    <li class="nav-item" id="homeItem">
+                        <span style="font-size: 18px; margin-right: 10px;">🏠</span>
+                        <span class="sidebar-text">Home</span>
+                    </li>
+                    <li class="nav-item" data-tab="patientInfo">
+                        <span style="font-size: 18px; margin-right: 10px;">👤</span>
+                        <span class="sidebar-text">Patient Registration</span>
+                    </li>
+                    <li class="nav-item" data-tab="reports">
+                        <span style="font-size: 18px; margin-right: 10px;">📊</span>
+                        <span class="sidebar-text">Reports</span>
+                    </li>
+                    <li class="nav-item" data-tab="registeredPatients">
+                        <span style="font-size: 18px; margin-right: 10px;">👥</span>
+                        <span class="sidebar-text">Registered Patients</span>
+                    </li>
+                    <li class="nav-item" data-tab="appointments">
+                        <span style="font-size: 18px; margin-right: 10px;">📅</span>
+                        <span class="sidebar-text">Appointments</span>
+                    </li>
+                    <li class="nav-item" data-tab="inventory">
+                        <span style="font-size: 18px; margin-right: 10px;">📦</span>
+                        <span class="sidebar-text">Inventory</span>
+                    </li>
+                    <li class="nav-item" data-tab="billing">
+                        <span style="font-size: 18px; margin-right: 10px;">💰</span>
+                        <span class="sidebar-text">Billing</span>
+                    </li>
+                    <li class="nav-item" data-tab="settings">
+                        <span style="font-size: 18px; margin-right: 10px;">⚙️</span>
+                        <span class="sidebar-text">Settings</span>
+                    </li>
+                    <li class="nav-item" id="profileItem">
+                        <span style="font-size: 18px; margin-right: 10px;">👤</span>
+                        <span class="sidebar-text">Profile</span>
+                    </li>
+                    <li class="nav-item" id="logoutItem">
+                        <span style="font-size: 18px; margin-right: 10px;">🚪</span>
+                        <span class="sidebar-text">Logout</span>
+                    </li>
+                </ul>
+            </nav>
+            <div style="padding: 15px; border-top: 1px solid #3b82f6;">
+                <div style="display: flex; align-items: center;">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 10px;">
+                    <div class="sidebar-text">
+                        <div style="font-weight: bold;" id="userName">Loading...</div>
+                        <div style="font-size: 12px; color: #93c5fd;">Receptionist</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Receptionist Dashboard</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="session-timer" id="sessionTimer">Session: 00:00:00</div>
+                <div class="search-input">
+                    <input type="text" placeholder="Search..." id="headerSearch" aria-label="Search">
+                    <i>🔍</i>
+                </div>
+                <button aria-label="View notifications">🔔 Notifications</button>
+            </div>
+        </header>
+
+        <div class="welcome-section">
+            <h2>Welcome back, <span id="welcomeName">Loading...</span>!</h2>
+            <p>Here's what you can do today:</p>
+            <div class="quick-actions">
+                <div class="action-card" id="newRegistration">
+                    <span>👤</span>
+                    <h3>New Registration</h3>
+                    <p>Register a new patient</p>
+                </div>
+                <div class="action-card">
+                    <span>📊</span>
+                    <h3>View Reports</h3>
+                    <p>Check daily reports</p>
+                </div>
+                <div class="action-card">
+                    <span>👥</span>
+                    <h3>Patients</h3>
+                    <p>View registered patients</p>
+                </div>
+                <div class="action-card">
+                    <span>📅</span>
+                    <h3>Appointments</h3>
+                    <p>Manage appointments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="home.js">
+       
+    </script>
+</body>
+</html> 
