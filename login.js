@@ -1,7 +1,7 @@
- // Sample user database (in a real application, this would be on the server)
- const users = {
+// Sample user database (in a real application, this would be on the server)
+const users = {
     'receptionist1': {
-        password: 'pass123',
+        password: '111',
         role: 'receptionist',
         name: 'John Doe'
     },
@@ -17,94 +17,109 @@
     }
 };
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
-    
-    // Reset error messages
-    document.getElementById('usernameError').style.display = 'none';
-    document.getElementById('passwordError').style.display = 'none';
-    document.getElementById('roleError').style.display = 'none';
-    
-    // Validate inputs
-    let isValid = true;
-    
-    if (!username) {
-        document.getElementById('usernameError').textContent = 'Username is required';
-        document.getElementById('usernameError').style.display = 'block';
-        isValid = false;
+// Check if user is already logged in
+if (sessionStorage.getItem('currentUser')) {
+    const user = JSON.parse(sessionStorage.getItem('currentUser'));
+    if (user.role === 'receptionist') {
+        window.location.href = 'home.html';
+    } else if (user.role === 'lab_scientist') {
+        window.location.href = 'lab_dashboard.html';
+    } else if (user.role === 'admin') {
+        window.location.href = 'admin_dashboard.html';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const roleSelect = document.getElementById('role');
+    const errorMessage = document.getElementById('errorMessage');
+    const forgotPasswordLink = document.getElementById('forgotPassword');
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const role = roleSelect.value;
+            
+            if (!username || !password || !role) {
+                showError('Please fill in all fields.');
+                return;
+            }
+            
+            // Check if user exists
+            const user = users[username];
+            
+            if (!user) {
+                showError('Invalid username.');
+                return;
+            }
+            
+            // Check password and role
+            if (user.password !== password) {
+                showError('Invalid password.');
+                return;
+            }
+            
+            if (user.role !== role) {
+                showError('Invalid role for this user.');
+                return;
+            }
+            
+            // Store user info in session storage
+            sessionStorage.setItem('currentUser', JSON.stringify({
+                username: username,
+                role: role,
+                name: user.name
+            }));
+            
+            // Redirect based on role
+            if (role === 'receptionist') {
+                window.location.href = 'home.html';
+            } else if (role === 'lab_scientist') {
+                window.location.href = 'lab_dashboard.html';
+            } else if (role === 'admin') {
+                window.location.href = 'admin_dashboard.html';
+            }
+        });
+    }
+
+    // Hide error message when user starts typing
+    if (usernameInput) {
+        usernameInput.addEventListener('input', hideError);
     }
     
-    if (!password) {
-        document.getElementById('passwordError').textContent = 'Password is required';
-        document.getElementById('passwordError').style.display = 'block';
-        isValid = false;
+    if (passwordInput) {
+        passwordInput.addEventListener('input', hideError);
     }
     
-    if (!role) {
-        document.getElementById('roleError').textContent = 'Please select your role';
-        document.getElementById('roleError').style.display = 'block';
-        isValid = false;
+    if (roleSelect) {
+        roleSelect.addEventListener('change', hideError);
     }
-    
-    if (isValid) {
-        // Check if user exists
-        const user = users[username];
-        
-        if (!user) {
-            document.getElementById('usernameError').textContent = 'Invalid username';
-            document.getElementById('usernameError').style.display = 'block';
-            return;
-        }
-        
-        // Check password and role
-        if (user.password !== password) {
-            document.getElementById('passwordError').textContent = 'Invalid password';
-            document.getElementById('passwordError').style.display = 'block';
-            return;
-        }
-        
-        if (user.role !== role) {
-            document.getElementById('roleError').textContent = 'Invalid role for this user';
-            document.getElementById('roleError').style.display = 'block';
-            return;
-        }
-        
-        // Store user info in session storage
-        sessionStorage.setItem('currentUser', JSON.stringify({
-            username: username,
-            role: role,
-            name: user.name
-        }));
-        
-        // Redirect based on role
-        if (role === 'receptionist') {
-            window.location.href = 'home.html';
-        } else if (role === 'lab_scientist') {
-            window.location.href = 'lab_dashboard.html';
-        } else if (role === 'admin') {
-            window.location.href = 'admin_dashboard.html';
-        }
+
+    // Forgot password link
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Please contact the system administrator to reset your password.');
+        });
     }
 });
 
-// Add input event listeners to hide error messages when user starts typing
-document.getElementById('username').addEventListener('input', function() {
-    document.getElementById('usernameError').style.display = 'none';
-});
+function showError(message) {
+    const errorMessage = document.getElementById('errorMessage');
+    if (errorMessage) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+    }
+}
 
-document.getElementById('password').addEventListener('input', function() {
-    document.getElementById('passwordError').style.display = 'none';
-});
-
-document.getElementById('role').addEventListener('change', function() {
-    document.getElementById('roleError').style.display = 'none';
-});
-
-document.getElementById('forgotPassword').addEventListener('click', function(e) {
-    e.preventDefault();
-    alert('Please contact your system administrator to reset your password.');
-});
+function hideError() {
+    const errorMessage = document.getElementById('errorMessage');
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
+}
