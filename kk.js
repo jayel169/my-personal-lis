@@ -4,16 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "Blood Glucose", cost: 50.00 },
         { name: "Lipid Profile", cost: 150.00 },
         { name: "Liver Function Test", cost: 180.00 },
-        { name: "Kidney Function Test", cost: 180.00 },
-        { name: "Thyroid Test", cost: 250.00 },
+        { name: "name: Kidney Function Test", cost: 180.00 },
+        { name: "name: Thyroid Test", cost: 250.00 },
         { name: "Urinalysis", cost: 80.00 },
         { name: "Stool Analysis", cost: 90.00 },
         { name: "Malaria Test", cost: 30.00 },
-        { name: "HIV Test", cost: 80.00 },
+        { name: "HIV Test", order: 80.00 },
         { name: "Hepatitis B Test", cost: 120.00 },
         { name: "Hepatitis C Test", cost: 120.00 },
-        { names: "Syphilis Test", cost: 80.00 },
-        { names: "Pregnancy Test", cost: 30.00 },
+        { name: "Syphilis Test", cost: 80.00 },
+        { name: "Pregnancy Test", cost: 30.00 },
         { name: "Blood Group", cost: 50.00 },
         { name: "Hemoglobin", cost: 40.00 },
         { name: "ESR", cost: 40.00 },
@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "Histopathology", cost: 350.00 },
         { name: "Cytology", cost: 300.00 }
     ];
+
+    let registeredPatients = JSON.parse(localStorage.getItem('registeredPatients')) || [];
 
     function populateTestNames() {
         const testNamesDatalist = document.getElementById('testNames');
@@ -241,7 +243,6 @@ ${labTestsRows}
     let editingIndex = -1;
     let currentVisitNumber = 0;
     let currentSampleId = 0;
-    let registeredPatients = [];
 
     // DOM elements
     const labOrdersTableBody = document.querySelector('#labOrdersTable tbody');
@@ -455,29 +456,8 @@ ${labTestsRows}
     // Initialize UI
     populateTestNames();
 
-    // Session timer
-    let startTime;
-    const storedStartTime = sessionStorage.getItem('sessionStartTime');
+    
 
-    if (storedStartTime) {
-        startTime = new Date(storedStartTime);
-    } else {
-        startTime = new Date();
-        sessionStorage.setItem('sessionStartTime', startTime.toISOString());
-    }
-
-    const sessionTimer = document.getElementById('sessionTimer');
-
-    function updateTimer() {
-        const elapsed = new Date() - startTime;
-        const hours = Math.floor(elapsed / (1000 * 60 * 60));
-        const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
-        sessionTimer.textContent = `Session: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
-
-    setInterval(updateTimer, 1000);
-    updateTimer();
 
     // Tab switching
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -736,6 +716,9 @@ ${labTestsRows}
                 document.getElementById('modalPriorityError').textContent = '';
                 document.getElementById('modalSampleTypeError').textContent = '';
                 document.getElementById('modalInstructionsError').textContent = '';
+
+                // Save to localStorage after adding a new patient
+                localStorage.setItem('registeredPatients', JSON.stringify(registeredPatients));
             } else {
                 console.log('Validation failed');
             }
@@ -1204,6 +1187,8 @@ ${labTestsRows}
 
     // Logout
     document.getElementById('logoutItem').addEventListener('click', () => {
+        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('sessionStartTime'); // Reset session timer
         document.getElementById('logoutModal').style.display = 'block';
     });
 
@@ -1216,3 +1201,51 @@ ${labTestsRows}
         document.getElementById('logoutModal').style.display = 'none';
     });
 });
+// Session Timer
+function ensureSessionTimerElement() {
+    let timer = document.getElementById('sessionTimer');
+    if (!timer) {
+        console.log('Timer element not found, creating one...');
+        timer = document.createElement('div');
+        timer.id = 'sessionTimer';
+        timer.className = 'session-timer';
+        timer.textContent = 'Session: 00:00:00';
+        document.body.insertBefore(timer, document.body.firstChild);
+    }
+    return timer;
+}
+
+// Initialize timer
+function initializeTimer() {
+    console.log('Initializing timer...');
+    let startTime;
+    const storedStartTime = sessionStorage.getItem('sessionStartTime');
+    
+    if (storedStartTime) {
+        console.log('Found stored start time:', storedStartTime);
+        startTime = new Date(storedStartTime);
+    } else {
+        console.log('No stored start time, creating new one');
+        startTime = new Date();
+        sessionStorage.setItem('sessionStartTime', startTime.toISOString());
+    }
+
+    function updateTimer() {
+        const timerElem = ensureSessionTimerElement();
+        let currentTime = new Date();
+        let timeDiff = currentTime - startTime;
+        let hours = Math.floor(timeDiff / (1000 * 60 * 60));
+        let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        timerElem.textContent = `Session: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Start the timer
+    console.log('Starting timer interval...');
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Initial update
+}
+
+// Initialize timer when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initializeTimer);
+
