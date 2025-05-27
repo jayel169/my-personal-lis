@@ -1,15 +1,13 @@
 // Get patients from localStorage
 function getPatients() {
-    const patients = JSON.parse(localStorage.getItem('registeredPatients')) || [];
-    return patients;
+    return JSON.parse(localStorage.getItem('registeredPatients')) || [];
 }
 
 // DOM Elements
 const tableBody = document.getElementById('patientsTableBody');
 const labResultsModal = document.getElementById('labResultsModal');
 const labResults = document.getElementById('labResults');
-const closeModal = document.querySelector('.close-modal');
-const searchInput = document.getElementById('patientSearch');
+const closeModal = document.querySelector('.close-btn');
 const userName = document.getElementById('userName');
 
 // Set user name from session storage
@@ -31,28 +29,54 @@ document.getElementById('profileItem').addEventListener('click', function() {
     alert('Profile functionality will be implemented soon.');
 });
 
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadPatients();
+});
+
+// Load patients from localStorage
+function loadPatients() {
+    const patients = getPatients();
+    renderPatients(patients);
+}
+
 // Render patients table
-function renderPatients(patientsData) {
-    tableBody.innerHTML = patientsData.map(patient => `
-        <tr>
+function renderPatients(patients) {
+    const tbody = document.querySelector('#patientsTable tbody');
+    tbody.innerHTML = '';
+    
+    patients.forEach(patient => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
             <td>${patient.visitNumber}</td>
             <td>${patient.firstName} ${patient.lastName}</td>
             <td>${patient.ageValue} ${patient.ageUnit}</td>
             <td>${patient.gender}</td>
             <td>GH₵${patient.totalCost.toFixed(2)}</td>
             <td>
-                <span class="status-badge status-${patient.labOrders.length > 0 ? 'completed' : 'pending'}">
+                <span class="status-badge ${patient.labOrders.length > 0 ? 'completed' : 'pending'}">
                     ${patient.labOrders.length > 0 ? 'Completed' : 'Pending'}
                 </span>
             </td>
             <td>
-                <button class="action-btn view-btn" onclick="viewLabResults('${patient.visitNumber}')">View Results</button>
-                <button class="action-btn edit-btn" onclick="editPatient('${patient.visitNumber}')">Edit</button>
-                <button class="action-btn print-btn" onclick="printPatient('${patient.visitNumber}')">Print</button>
-                <button class="action-btn delete-btn" onclick="deletePatient('${patient.visitNumber}')">Delete</button>
+                <div class="action-buttons">
+                    <button onclick="viewLabResults('${patient.visitNumber}')" class="view-btn" title="View Lab Results">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button onclick="editPatient('${patient.visitNumber}')" class="edit-btn" title="Edit Patient">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="printPatient('${patient.visitNumber}')" class="print-btn" title="Print Patient Details">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <button onclick="deletePatient('${patient.visitNumber}')" class="delete-btn" title="Delete Patient">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </td>
-        </tr>
-    `).join('');
+        `;
+        tbody.appendChild(row);
+    });
 }
 
 // View lab results
@@ -224,62 +248,82 @@ function deletePatient(visitNo) {
         const patients = getPatients();
         const updatedPatients = patients.filter(p => p.visitNumber !== visitNo);
         localStorage.setItem('registeredPatients', JSON.stringify(updatedPatients));
-        renderPatients(updatedPatients);
+        loadPatients();
     }
 }
 
-// Search functionality
-searchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const patients = getPatients();
-    const filteredPatients = patients.filter(patient => 
-        `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(searchTerm) ||
-        patient.visitNumber.toLowerCase().includes(searchTerm)
-    );
-    renderPatients(filteredPatients);
+// Close modal when clicking the close button or outside the modal
+closeModal.addEventListener('click', () => {
+    labResultsModal.style.display = 'none';
 });
 
-// Close modal when clicking the close button or outside the modal
-closeModal.onclick = () => labResultsModal.style.display = 'none';
-window.onclick = (e) => {
+window.addEventListener('click', (e) => {
     if (e.target === labResultsModal) {
         labResultsModal.style.display = 'none';
     }
-};
-
-// Session timer functionality
-let startTime;
-const storedStartTime = sessionStorage.getItem('sessionStartTime');
-
-if (storedStartTime) {
-    startTime = new Date(storedStartTime);
-} else {
-    startTime = new Date();
-    sessionStorage.setItem('sessionStartTime', startTime.toISOString());
-}
-
-function updateTimer() {
-    let currentTime = new Date();
-    let timeDiff = currentTime - startTime;
-    let hours = Math.floor(timeDiff / (1000 * 60 * 60));
-    let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-    document.getElementById('sessionTimer').textContent = `Session: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
-setInterval(updateTimer, 1000);
-updateTimer();
-
-// Toggle sidebar
-document.getElementById('toggleSidebar').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
 });
+
+// Session Timer
+function ensureSessionTimerElement() {
+    let timer = document.getElementById('sessionTimer');
+    if (!timer) {
+        console.log('Timer element not found, creating one...');
+        timer = document.createElement('div');
+        timer.id = 'sessionTimer';
+        timer.className = 'session-timer';
+        timer.textContent = 'Session: 00:00:00';
+        document.body.insertBefore(timer, document.body.firstChild);
+    }
+    return timer;
+}
+
+// Initialize timer
+function initializeTimer() {
+    console.log('Initializing timer...');
+    let startTime;
+    const storedStartTime = sessionStorage.getItem('sessionStartTime');
+    
+    if (storedStartTime) {
+        console.log('Found stored start time:', storedStartTime);
+        startTime = new Date(storedStartTime);
+    } else {
+        console.log('No stored start time, creating new one');
+        startTime = new Date();
+        sessionStorage.setItem('sessionStartTime', startTime.toISOString());
+    }
+
+    function updateTimer() {
+        const timerElem = ensureSessionTimerElement();
+        let currentTime = new Date();
+        let timeDiff = currentTime - startTime;
+        let hours = Math.floor(timeDiff / (1000 * 60 * 60));
+        let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        timerElem.textContent = `Session: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Start the timer
+    console.log('Starting timer interval...');
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Initial update
+}
+
+// Initialize timer when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initializeTimer);
+
+// Sidebar Toggle
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.getElementById('toggleSidebar');
+
+if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+}
 
 // Handle logout
 document.getElementById('logoutItem').addEventListener('click', function() {
     sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('sessionStartTime'); // Reset session timer
     window.location.href = 'index.html';
-});
-
-// Initial render
-renderPatients(getPatients()); 
+}); 
