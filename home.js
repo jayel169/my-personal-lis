@@ -9,16 +9,26 @@ document.getElementById('userName').textContent = currentUser.name;
 document.getElementById('welcomeName').textContent = currentUser.name;
 
 // Session timer
-let startTime = Date.now();
+let startTime;
+const storedStartTime = sessionStorage.getItem('sessionStartTime');
+
+if (storedStartTime) {
+    startTime = new Date(storedStartTime);
+} else {
+    startTime = new Date();
+    sessionStorage.setItem('sessionStartTime', startTime.toISOString());
+}
+
 const sessionTimer = document.getElementById('sessionTimer');
 
 function updateTimer() {
-    const elapsed = Date.now() - startTime;
+    const elapsed = new Date() - startTime;
     const hours = Math.floor(elapsed / (1000 * 60 * 60));
     const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
     sessionTimer.textContent = `Session: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
+
 setInterval(updateTimer, 1000);
 updateTimer();
 
@@ -33,6 +43,12 @@ document.querySelector('[data-tab="patientInfo"]').addEventListener('click', fun
 
 document.getElementById('newRegistration').addEventListener('click', function() {
     window.location.href = 'kk.html';
+});
+
+// Add Registered Patients navigation
+document.querySelector('a[href="patients.html"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = 'patients.html';
 });
 
 // Handle logout
