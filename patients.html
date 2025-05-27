@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Patients List</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="patients.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div>
+            <div style="padding: 15px; border-bottom: 1px solid #3b82f6; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center;">
+                    <span style="font-size: 24px; margin-right: 10px;">🏥</span>
+                    <span class="sidebar-text" style="font-weight: bold; font-size: 20px;">MediCare</span>
+                </div>
+                <button class="toggle-btn" id="toggleSidebar" aria-label="Toggle sidebar menu">☰</button>
+            </div>
+            <nav>
+                <ul style="padding: 20px 0; list-style: none; margin: 0;">
+                    <li class="nav-item">
+                        <a href="home.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+                            <span style="font-size: 18px; margin-right: 10px;">🏠</span>
+                            <span class="sidebar-text">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="kk.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+                            <span style="font-size: 18px; margin-right: 10px;">👤</span>
+                            <span class="sidebar-text">Patient Registration</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-tab="reports">
+                        <span style="font-size: 18px; margin-right: 10px;">📊</span>
+                        <span class="sidebar-text">Reports</span>
+                    </li>
+                    <li class="nav-item">
+                        <a href="patients.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+                            <span style="font-size: 18px; margin-right: 10px;">👥</span>
+                            <span class="sidebar-text">Registered Patients</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-tab="appointments">
+                        <span style="font-size: 18px; margin-right: 10px;">📅</span>
+                        <span class="sidebar-text">Appointments</span>
+                    </li>
+                    <li class="nav-item" data-tab="inventory">
+                        <span style="font-size: 18px; margin-right: 10px;">📦</span>
+                        <span class="sidebar-text">Inventory</span>
+                    </li>
+                    <li class="nav-item" data-tab="billing">
+                        <span style="font-size: 18px; margin-right: 10px;">💰</span>
+                        <span class="sidebar-text">Billing</span>
+                    </li>
+                    <li class="nav-item" data-tab="settings">
+                        <span style="font-size: 18px; margin-right: 10px;">⚙️</span>
+                        <span class="sidebar-text">Settings</span>
+                    </li>
+                    <li class="nav-item" id="profileItem">
+                        <span style="font-size: 18px; margin-right: 10px;">👤</span>
+                        <span class="sidebar-text">Profile</span>
+                    </li>
+                    <li class="nav-item" id="logoutItem">
+                        <span style="font-size: 18px; margin-right: 10px;">🚪</span>
+                        <span class="sidebar-text">Logout</span>
+                    </li>
+                </ul>
+            </nav>
+            <div style="padding: 15px; border-top: 1px solid #3b82f6;">
+                <div style="display: flex; align-items: center;">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 10px;">
+                    <div class="sidebar-text">
+                        <div style="font-weight: bold;" id="userName">Loading...</div>
+                        <div style="font-size: 12px; color: #93c5fd;">Receptionist</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Patients List</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="session-timer" id="sessionTimer">Session: 00:00:00</div>
+                <div class="search-input">
+                    <input type="text" placeholder="Search patients..." id="patientSearch" aria-label="Search patients">
+                    <i>🔍</i>
+                </div>
+            </div>
+        </header>
+
+        <div class="table-container">
+            <table class="patients-table">
+                <thead>
+                    <tr>
+                        <th>Visit Number</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Amount</th>
+                        <th>Lab Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patientsTableBody">
+                    <!-- Table content will be dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Lab Results Modal -->
+    <div id="labResultsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Lab Results</h2>
+            <div class="lab-results" id="labResults">
+                <!-- Patient Info Section -->
+                <div class="patient-info">
+                    <div class="info-row">
+                        <div class="info-item">
+                            <label>Patient Name:</label>
+                            <span id="resultPatientName"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Visit Number:</label>
+                            <span id="resultVisitNumber"></span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <label>Sex:</label>
+                            <span id="resultSex"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Number of Tests:</label>
+                            <span id="resultTestCount"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Panels Section -->
+                <div class="test-panels">
+                    <div class="panel-controls">
+                        <label class="select-all">
+                            <input type="checkbox" id="selectAllPanels">
+                            Select All Test Panels
+                        </label>
+                        <button id="printSelected" class="print-btn">Print Selected</button>
+                    </div>
+                    <div id="testPanelsContainer">
+                        <!-- Test panels will be dynamically populated -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="patients.js"></script>
+</body>
+</html>
