@@ -35,6 +35,12 @@ document.getElementById('newRegistration').addEventListener('click', function() 
     window.location.href = 'kk.html';
 });
 
+// Add Registered Patients navigation
+document.querySelector('a[href="registered_patients.html"]').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default link behavior
+    window.location.href = 'registered_patients.html';
+});
+
 // Handle logout
 document.getElementById('logoutItem').addEventListener('click', function() {
     sessionStorage.removeItem('currentUser');
