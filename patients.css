@@ -1,346 +1,125 @@
-/* Table Container Styles */
-.table-container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    padding: 20px;
-    max-height: 600px;
-    overflow-y: auto;
-}
-
-/* Table Styles */
-.patients-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Inter', sans-serif;
-    text-align: left;
-}
-
-.patients-table th {
-    padding: 15px;
-    font-weight: 600;
-    color: #374151;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-/* Column-specific styles */
-.patients-table th:nth-child(1),
-.patients-table td:nth-child(1) {
-    background-color: #f0f9ff; /* Light blue for Visit Number */
-}
-
-.patients-table th:nth-child(2),
-.patients-table td:nth-child(2) {
-    background-color: #f0fdf4; /* Light green for Name */
-}
-
-.patients-table th:nth-child(3),
-.patients-table td:nth-child(3) {
-    background-color: #fff7ed; /* Light orange for Age */
-}
-
-.patients-table th:nth-child(4),
-.patients-table td:nth-child(4) {
-    background-color: #fef2f2; /* Light red for Sex */
-}
-
-.patients-table th:nth-child(5),
-.patients-table td:nth-child(5) {
-    background-color: #f5f3ff; /* Light purple for Amount */
-}
-
-.patients-table th:nth-child(6),
-.patients-table td:nth-child(6) {
-    background-color: #ecfdf5; /* Light teal for Lab Status */
-}
-
-.patients-table th:nth-child(7),
-.patients-table td:nth-child(7) {
-    background-color: #f8fafc; /* Light gray for Actions */
-}
-
-.patients-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #e5e7eb;
-    color: #4b5563;
-}
-
-.patients-table tr:hover {
-    background-color: #f9fafb;
-}
-
-/* Status Badge Styles */
-.status-badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.status-completed {
-    background-color: #dcfce7;
-    color: #166534;
-}
-
-.status-pending {
-    background-color: #fef3c7;
-    color: #92400e;
-}
-
-/* Action Button Styles */
-.action-btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-right: 4px;
-    transition: background-color 0.2s;
-}
-
-.view-btn {
-    background-color: #3b82f6;
-    color: white;
-}
-
-.edit-btn {
-    background-color: #10b981;
-    color: white;
-}
-
-.print-btn {
-    background-color: #6366f1;
-    color: white;
-}
-
-.delete-btn {
-    background-color: #ef4444;
-    color: white;
-}
-
-.action-btn:hover {
-    opacity: 0.9;
-}
-
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-.modal-content {
-    background: white;
-    width: 90%;
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.close-modal {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    color: #64748b;
-}
-
-/* Lab Results Modal Specific Styles */
-.lab-results {
-    margin-top: 20px;
-}
-
-.patient-info {
-    background: #f8fafc;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.info-item {
-    flex: 1;
-    margin-right: 20px;
-}
-
-.info-item label {
-    font-weight: 600;
-    color: #1e293b;
-    margin-right: 8px;
-}
-
-.test-panels {
-    margin-top: 20px;
-}
-
-.panel-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.select-all {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #1e293b;
-}
-
-.test-panel {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    margin-bottom: 15px;
-    overflow: hidden;
-}
-
-.panel-header {
-    background: #f8fafc;
-    padding: 12px 15px;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.panel-title {
-    font-weight: 600;
-    color: #1e293b;
-}
-
-.panel-checkbox {
-    margin-right: 10px;
-}
-
-.panel-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.panel-table th {
-    background: #f1f5f9;
-    padding: 10px;
-    text-align: left;
-    font-weight: 600;
-    color: #1e293b;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.panel-table td {
-    padding: 10px;
-    border-bottom: 1px solid #e2e8f0;
-    color: #475569;
-}
-
-.flag-high {
-    color: #dc2626;
-    font-weight: 500;
-}
-
-.flag-low {
-    color: #2563eb;
-    font-weight: 500;
-}
-
-.print-btn {
-    background: #3b82f6;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.print-btn:hover {
-    background: #2563eb;
-}
-
-@media print {
-    body * {
-        visibility: hidden;
+// Sample user database (in a real application, this would be on the server)
+const users = {
+    'receptionist1': {
+        password: '111',
+        role: 'receptionist',
+        name: 'John Doe'
+    },
+    'lab1': {
+        password: 'lab123',
+        role: 'lab_scientist',
+        name: 'Jane Smith'
+    },
+    'admin1': {
+        password: 'admin123',
+        role: 'admin',
+        name: 'Admin User'
     }
-    .print-content, .print-content * {
-        visibility: visible;
-    }
-    .print-content {
-        position: absolute;
-        left: 0;
-        top: 0;
+};
+
+// Check if user is already logged in
+if (sessionStorage.getItem('currentUser')) {
+    const user = JSON.parse(sessionStorage.getItem('currentUser'));
+    if (user.role === 'receptionist') {
+        window.location.href = 'home.html';
+    } else if (user.role === 'lab_scientist') {
+        window.location.href = 'lab_dashboard.html';
+    } else if (user.role === 'admin') {
+        window.location.href = 'admin_dashboard.html';
     }
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .patients-table {
-        display: block;
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const roleSelect = document.getElementById('role');
+    const errorMessage = document.getElementById('errorMessage');
+    const forgotPasswordLink = document.getElementById('forgotPassword');
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const role = roleSelect.value;
+            
+            if (!username || !password || !role) {
+                showError('Please fill in all fields.');
+                return;
+            }
+            
+            // Check if user exists
+            const user = users[username];
+            
+            if (!user) {
+                showError('Invalid username.');
+                return;
+            }
+            
+            // Check password and role
+            if (user.password !== password) {
+                showError('Invalid password.');
+                return;
+            }
+            
+            if (user.role !== role) {
+                showError('Invalid role for this user.');
+                return;
+            }
+            
+            // Store user info in session storage
+            sessionStorage.setItem('currentUser', JSON.stringify({
+                username: username,
+                role: role,
+                name: user.name
+            }));
+            
+            // Redirect based on role
+            if (role === 'receptionist') {
+                window.location.href = 'home.html';
+            } else if (role === 'lab_scientist') {
+                window.location.href = 'lab_dashboard.html';
+            } else if (role === 'admin') {
+                window.location.href = 'admin_dashboard.html';
+            }
+        });
     }
 
-    .patients-table thead {
-        display: none;
+    // Hide error message when user starts typing
+    if (usernameInput) {
+        usernameInput.addEventListener('input', hideError);
+    }
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('input', hideError);
+    }
+    
+    if (roleSelect) {
+        roleSelect.addEventListener('change', hideError);
     }
 
-    .patients-table tbody,
-    .patients-table tr,
-    .patients-table td {
-        display: block;
-        width: 100%;
+    // Forgot password link
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Please contact the system administrator to reset your password.');
+        });
     }
+});
 
-    .patients-table tr {
-        margin-bottom: 15px;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 10px;
+function showError(message) {
+    const errorMessage = document.getElementById('errorMessage');
+    if (errorMessage) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
     }
+}
 
-    .patients-table td {
-        text-align: right;
-        padding: 8px;
-        position: relative;
-        padding-left: 50%;
-        border-bottom: 1px solid #e5e7eb;
+function hideError() {
+    const errorMessage = document.getElementById('errorMessage');
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
     }
-
-    .patients-table td:last-child {
-        border-bottom: none;
-    }
-
-    .patients-table td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        width: 45%;
-        font-weight: 600;
-        text-align: left;
-    }
-
-    /* Override column colors for mobile view */
-    .patients-table td {
-        background-color: white !important;
-    }
-
-    .patients-table td::before {
-        background-color: #f8fafc;
-        padding: 8px;
-        margin: -8px;
-        margin-right: 10px;
-        border-radius: 4px;
-    }
-} 
+}
