@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,21 +19,27 @@
             </div>
             <nav>
                 <ul style="padding: 20px 0; list-style: none; margin: 0;">
-                    <li class="nav-item" id="homeItem">
-                        <span style="font-size: 18px; margin-right: 10px;">🏠</span>
-                        <span class="sidebar-text">Home</span>
+                    <li class="nav-item">
+                        <a href="home.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+                            <span style="font-size: 18px; margin-right: 10px;">🏠</span>
+                            <span class="sidebar-text">Home</span>
+                        </a>
                     </li>
-                    <li class="nav-item active" data-tab="patientInfo">
-                        <span style="font-size: 18px; margin-right: 10px;">👤</span>
-                        <span class="sidebar-text">Patient Registration</span>
+                    <li class="nav-item">
+                        <a href="kk.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+                            <span style="font-size: 18px; margin-right: 10px;">👤</span>
+                            <span class="sidebar-text">Patient Registration</span>
+                        </a>
                     </li>
                     <li class="nav-item" data-tab="reports">
                         <span style="font-size: 18px; margin-right: 10px;">📊</span>
                         <span class="sidebar-text">Reports</span>
                     </li>
-                    <li class="nav-item" data-tab="registeredPatients">
-                        <span style="font-size: 18px; margin-right: 10px;">👥</span>
-                        <span class="sidebar-text">Registered Patients</span>
+                    <li class="nav-item">
+                        <a href="patients.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+                            <span style="font-size: 18px; margin-right: 10px;">👥</span>
+                            <span class="sidebar-text">Registered Patients</span>
+                        </a>
                     </li>
                     <li class="nav-item" data-tab="appointments">
                         <span style="font-size: 18px; margin-right: 10px;">📅</span>
@@ -180,11 +187,6 @@
                     <h2 id="labOrdersTitle">Lab Orders Dashboard</h2>
                     <div class="lab-filters">
                         <input type="text" id="labSearch" placeholder="Search orders..." aria-label="Search lab orders">
-                        <select id="statusFilter" aria-label="Filter by status">
-                            <option value="all">All Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Completed">Completed</option>
-                        </select>
                         <select id="priorityFilter" aria-label="Filter by priority">
                             <option value="all">All Priority</option>
                             <option value="normal">Normal</option>
@@ -195,18 +197,16 @@
                 </div>
                 <div class="lab-summary">
                     <span id="totalOrders">Total Orders: 0</span>
-                    <span id="pendingOrders">Pending: 0</span>
-                    <span id="completedOrders">Completed: 0</span>
                 </div>
                 <table class="lab-table" id="labOrdersTable">
                     <thead>
                         <tr>
                             <th>Test Name <span class="sort-icon" data-sort="testName">↕</span></th>
-                            <th>Test Date <span class="sort-icon" data-sort="testDate">↕</span></th>
-                            <th>Status</th>
+                            <th>Requesting Physician <span class="sort-icon" data-sort="requestingPhysician">↕</span></th>
+                            <th>Department <span class="sort-icon" data-sort="requestingDepartment">↕</span></th>
                             <th>Priority</th>
                             <th>Sample Type</th>
-                            <th>Cost of Test <span class="sort-icon" data-sort="cost">↕</span></th>
+                            <th>Cost of Test (GH₵) <span class="sort-icon" data-sort="cost">↕</span></th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -498,23 +498,47 @@
                 <button class="close" id="closeLabOrderModal">×</button>
                 <div id="labOrderForm" class="modal-form">
                     <div class="form-group">
-                        <label for="modalTestName">Test Name *</label>
-                        <input type="text" id="modalTestName" name="testName" list="testNames" placeholder="Search for a test..." required aria-label="Test name">
+                        <label for="modalTestName">Test Name:</label>
+                        <input type="text" id="modalTestName" list="testNames" required>
                         <datalist id="testNames"></datalist>
-                        <span class="error" id="modalTestNameError"></span>
+                        <span id="modalTestNameError" class="error"></span>
                     </div>
                     <div class="form-group">
-                        <label for="modalTestDate">Test Date *</label>
-                        <input type="date" id="modalTestDate" name="testDate" required aria-label="Test date">
-                        <span class="error" id="modalTestDateError"></span>
+                        <label for="modalRequestingPhysician">Requesting Physician:</label>
+                        <input type="text" id="modalRequestingPhysician" placeholder="Enter physician name" required>
+                        <span id="modalRequestingPhysicianError" class="error"></span>
                     </div>
                     <div class="form-group">
-                        <label for="modalPriority">Priority *</label>
-                        <select id="modalPriority" name="priority" required aria-label="Priority">
+                        <label for="modalRequestingDepartment">Requesting Department:</label>
+                        <select id="modalRequestingDepartment" required>
+                            <option value="">Select Department</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="outpatient">Outpatient</option>
+                            <option value="inpatient">Inpatient</option>
+                            <option value="pediatrics">Pediatrics</option>
+                            <option value="obstetrics">Obstetrics & Gynecology</option>
+                            <option value="surgery">Surgery</option>
+                            <option value="internal_medicine">Internal Medicine</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                            <option value="dermatology">Dermatology</option>
+                            <option value="ophthalmology">Ophthalmology</option>
+                            <option value="ent">ENT</option>
+                            <option value="dental">Dental</option>
+                            <option value="psychiatry">Psychiatry</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <span id="modalRequestingDepartmentError" class="error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalPriority">Priority:</label>
+                        <select id="modalPriority" required>
                             <option value="normal">Normal</option>
                             <option value="urgent">Urgent</option>
+                            <option value="stat">STAT</option>
                         </select>
-                        <span class="error" id="modalPriorityError"></span>
+                        <span id="modalPriorityError" class="error"></span>
                     </div>
                     <div class="form-group">
                         <label for="modalSampleType">Sample Type *</label>
@@ -522,12 +546,33 @@
                             <option value="blood">Blood</option>
                             <option value="urine">Urine</option>
                             <option value="tissue">Tissue</option>
+                            <option value="sputum">Sputum</option>
+                            <option value="stool">Stool</option>
+                            <option value="cerebrospinal">Cerebrospinal Fluid</option>
+                            <option value="semen">Semen</option>
+                            <option value="nasal_swab">Nasal Swab</option>
+                            <option value="throat_swab">Throat Swab</option>
+                            <option value="wound_swab">Wound Swab</option>
+                            <option value="vaginal_swab">Vaginal Swab</option>
+                            <option value="cervical_swab">Cervical Swab</option>
+                            <option value="bone_marrow">Bone Marrow</option>
+                            <option value="synovial_fluid">Synovial Fluid</option>
+                            <option value="pleural_fluid">Pleural Fluid</option>
+                            <option value="peritoneal_fluid">Peritoneal Fluid</option>
+                            <option value="pericardial_fluid">Pericardial Fluid</option>
+                            <option value="amniotic_fluid">Amniotic Fluid</option>
+                            <option value="saliva">Saliva</option>
+                            <option value="hair">Hair</option>
+                            <option value="nail">Nail</option>
+                            <option value="skin_scraping">Skin Scraping</option>
+                            <option value="biopsy">Biopsy</option>
+                            <option value="aspirate">Aspirate</option>
                             <option value="other">Other</option>
                         </select>
                         <span class="error" id="modalSampleTypeError"></span>
                     </div>
                     <div class="form-group">
-                        <label for="modalCostDisplay">Cost of Test</label>
+                        <label for="modalCostDisplay">Cost of Test (GH₵)</label>
                         <input type="text" id="modalCostDisplay" readonly aria-label="Cost of test">
                     </div>
                     <div class="form-group full-width">
@@ -598,7 +643,8 @@
                     <div class="quick-view-section">
                         <h4>Test Information</h4>
                         <p><strong>Test Name:</strong> <span id="quickViewTestName"></span></p>
-                        <p><strong>Test Date:</strong> <span id="quickViewTestDate"></span></p>
+                        <p><strong>Requesting Physician:</strong> <span id="quickViewRequestingPhysician"></span></p>
+                        <p><strong>Department:</strong> <span id="quickViewRequestingDepartment"></span></p>
                         <p><strong>Priority:</strong> <span id="quickViewPriority"></span></p>
                         <p><strong>Sample Type:</strong> <span id="quickViewSampleType"></span></p>
                         <p><strong>Cost:</strong> <span id="quickViewCost"></span></p>
@@ -621,8 +667,19 @@
         </div>
     </div>
 
-    <script src="kk.js">
-        
-    </script>
+    <div class="modal" id="notificationModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-content">
+                <h3>Success!</h3>
+                <p style="margin-bottom: 15px; color: #6b7280;">Bill has been printed successfully and patient has been added to the system.</p>
+                <div class="button-group">
+                    <button class="action" id="notificationClose" style="background-color: #3b82f6;">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="kk.js"></script>
 </body>
 </html>
